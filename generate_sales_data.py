@@ -25,6 +25,7 @@ discount_item_probability = [0.5, 0.3, 0.2]
 today = datetime.today()
 export_date = (today - timedelta(days=1)).date()
 
+dirname = os.path.dirname(__file__)
 c = 25
 
 if not os.path.exists('data'):
@@ -53,5 +54,5 @@ for val in shop_number:
       d['category'].append(category)
       d['item'].append(item)
     df = pd.DataFrame(d)
-    df.to_csv(f'data/{file_name}', index=False)
+    df.to_csv(os.path.join(dirname, f'data/{file_name}'), index=False)
   
