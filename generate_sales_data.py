@@ -34,14 +34,14 @@ for val in shop_number:
   for cash in cash_number:
     file_name = f'{val}_{cash}.csv'
     d = {
-      'dt': [export_date.strftime("%d-%m-%Y")] * c,
+      'dt': [export_date.strftime("%Y-%m-%d")] * c,
       'shop_num': [val] * c,
       'cash_num': [cash] * c,
       'doc_id': [],
       'item': [],
       'category': [],
       'amount': [random.choices(amount_item, amount_item_probability, k=1)[0] for _ in range(c)],
-      'price': [random.randint(0, 500) for _ in range(c)],
+      'price': [random.randint(10, 500) for _ in range(c)],
       'discount': [random.choices(discount_item, discount_item_probability, k=1)[0] for _ in range(c)]
     }
     
