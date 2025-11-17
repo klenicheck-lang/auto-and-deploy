@@ -9,7 +9,7 @@ dirname = os.path.dirname(__file__)
 
 config = configparser.ConfigParser()
 config.read(os.path.join(dirname, 'config.ini'))
-SALES_PATH = config['Files']['SALES_PATH']
+SALES_PATH = os.path.join(dirname, 'data', '[0-9][0-9]*_[0-9].csv')
 DATABASE_CREDS = config['Database']
 
 sales_df = pd.DataFrame()
@@ -19,7 +19,7 @@ if files:
     for file_path in files:
         temp_df = pd.read_csv(file_path)
         frames.append(temp_df)
-        #os.remove(file_path)
+        os.remove(file_path)
     sales_df = pd.concat(frames, ignore_index=True)
 
         

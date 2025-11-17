@@ -28,31 +28,33 @@ export_date = (today - timedelta(days=1)).date()
 dirname = os.path.dirname(__file__)
 c = 25
 
-if not os.path.exists('data'):
-    os.makedirs('data')
+data_dir = os.path.join(dirname, 'data')
+if not os.path.exists(data_dir):
+    os.makedirs(data_dir)
 
-for val in shop_number:
-  for cash in cash_number:
-    file_name = f'{val}_{cash}.csv'
-    d = {
-      'dt': [export_date.strftime("%Y-%m-%d")] * c,
-      'shop_num': [val] * c,
-      'cash_num': [cash] * c,
-      'doc_id': [],
-      'item': [],
-      'category': [],
-      'amount': [random.choices(amount_item, amount_item_probability, k=1)[0] for _ in range(c)],
-      'price': [random.randint(10, 500) for _ in range(c)],
-      'discount': [random.choices(discount_item, discount_item_probability, k=1)[0] for _ in range(c)]
-    }
+if 0 <= today.weekday() < 6:
+  for val in shop_number:
+    for cash in cash_number:
+      file_name = f'{val}_{cash}.csv'
+      d = {
+        'dt': [export_date.strftime("%Y-%m-%d")] * c,
+        'shop_num': [val] * c,
+        'cash_num': [cash] * c,
+        'doc_id': [],
+        'item': [],
+        'category': [],
+        'amount': [random.choices(amount_item, amount_item_probability, k=1)[0] for _ in range(c)],
+        'price': [random.randint(10, 500) for _ in range(c)],
+        'discount': [random.choices(discount_item, discount_item_probability, k=1)[0] for _ in range(c)]
+      }
+      
+      unique_doc_ids = [''.join(random.choices(string.digits, k=1)) + random.choice(string.ascii_uppercase) for _ in range(c // 2)]
+      d['doc_id'] = [random.choice(unique_doc_ids) if random.random() < 0.8 else ''.join(random.choices(string.digits, k=1)) + random.choice(string.ascii_uppercase) for _ in range(c)]
+      for _ in range(c):
+        category = random.choice(list(categories.keys()))
+        item = random.choice(categories[category])
+        d['category'].append(category)
+        d['item'].append(item)
+      df = pd.DataFrame(d)
+      df.to_csv(os.path.join(data_dir, file_name), index=False)
     
-    unique_doc_ids = [''.join(random.choices(string.digits, k=1)) + random.choice(string.ascii_uppercase) for _ in range(c // 2)]
-    d['doc_id'] = [random.choice(unique_doc_ids) if random.random() < 0.8 else ''.join(random.choices(string.digits, k=1)) + random.choice(string.ascii_uppercase) for _ in range(c)]
-    for _ in range(c):
-      category = random.choice(list(categories.keys()))
-      item = random.choice(categories[category])
-      d['category'].append(category)
-      d['item'].append(item)
-    df = pd.DataFrame(d)
-    df.to_csv(os.path.join(dirname, f'data/{file_name}'), index=False)
-  
